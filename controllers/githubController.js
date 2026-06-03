@@ -324,17 +324,77 @@ const getAnalytics = async (req, res) => {
 
 const getStats = async (req, res) => {
   try {
-    const [stats] = await db.execute(`
-     SELECT
-    COUNT(*) AS totalProfiles,
-    AVG(followers) AS averageFollowers,
-    MAX(followers) AS highestFollowers,
-    AVG(public_repos) AS averageRepos,
-    AVG(profile_completeness) AS averageCompleteness
-    FROM github_profiles
+    const [basicStats] = await db.query(`
+      SELECT
+        COUNT(*) AS totalProfiles,
+        AVG(followers) AS averageFollowers,
+        MAX(followers) AS highestFollowers,
+        AVG(public_repos) AS averageRepos,
+        AVG(profile_completeness) AS averageCompleteness
+      FROM github_profiles
     `);
 
-    res.json(stats[0]);
+    const [mostPopular] = await db.query(`
+      SELECT username, popularity_score
+      FROM github_profiles
+      ORDER BY popularity_score DESC
+      LIMIT 1
+    `);
+
+    const [mostComplete] = await db.query(`
+      SELECT username, profile_completeness
+      FROM github_profiles
+      ORDER BY profile_completeness DESC
+      LIMIT 1
+    `);
+
+    const [topLocation] = await db.query(`
+      SELECT location, COUNT(*) AS count
+      FROM github_profiles
+      WHERE location IS NOT NULL
+      GROUP BY location
+      ORDER BY count DESC
+      LIMIT 1
+    `);
+
+    const [topCompany] = await db.query(`
+      SELECT company, COUNT(*) AS count
+      FROM github_profiles
+      WHERE company IS NOT NULL
+      GROUP BY company
+      ORDER BY count DESC
+      LIMIT 1
+    `);
+
+    const [skillDistribution] = await db.query(`
+      SELECT skill_category, COUNT(*) AS count
+      FROM github_profiles
+      WHERE skill_category !="Other"
+      GROUP BY skill_category
+      ORDER BY count DESC
+    `);
+
+    const [averageRatio] = await db.query(`
+      SELECT AVG(follower_following_ratio)
+      AS averageRatio
+      FROM github_profiles
+    `);
+
+    res.status(200).json({
+      ...basicStats[0],
+
+      mostPopularProfile: mostPopular[0] || null,
+
+      mostCompleteProfile: mostComplete[0] || null,
+
+      topLocation: topLocation[0] || null,
+
+      topCompany: topCompany[0] || null,
+
+      averageFollowerFollowingRatio: averageRatio[0]?.averageRatio || 0,
+
+      skillDistribution,
+    });
   } catch (error) {
     res.status(500).json({
       message: error.message,

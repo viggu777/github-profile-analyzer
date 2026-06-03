@@ -42,20 +42,12 @@ CREATE TABLE `github_profiles` (
   `twitter_username` varchar(100) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `profile_completeness` int DEFAULT NULL,
+  `skill_category` varchar(100) DEFAULT NULL,
+  `follower_following_ratio` float DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `github_profiles`
---
-
-LOCK TABLES `github_profiles` WRITE;
-/*!40000 ALTER TABLE `github_profiles` DISABLE KEYS */;
-INSERT INTO `github_profiles` VALUES (6,'torvalds','Linus Torvalds',305458,0,11,1,'https://github.com/torvalds','2011-09-03 15:26:22','2026-06-02 13:54:20',15,610927,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(7,'gaearon','dan',90799,174,296,82,'https://github.com/gaearon','2011-05-25 18:18:31','2026-06-02 13:54:47',15,181894,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'viggu777','MOHAN VIGNESH',0,1,11,0,'https://github.com/viggu777','2024-08-28 11:53:32','2026-06-02 18:59:14',2,11,NULL,'Vizag','',NULL,NULL,NULL,33);
-/*!40000 ALTER TABLE `github_profiles` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -66,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-06-03  0:45:27
+-- Dump completed on 2026-06-03 20:30:59
